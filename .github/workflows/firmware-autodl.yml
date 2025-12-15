@@ -72,6 +72,11 @@ jobs:
 
           tail -n 4 firmware_output.txt > changelog_body.txt
           
+      - name: 📦 Rename zip file
+        if: steps.version_check.outputs.new_version == 'true'
+        run: |
+          mv "Firmware ${{ steps.download.outputs.firmware_version }}.zip" "Firmware.zip"
+          
       - name: 📝 Prepare Release Body
         id: prepare_body
         if: steps.version_check.outputs.new_version == 'true'
@@ -98,6 +103,6 @@ jobs:
             ${{ steps.prepare_body.outputs.release_body }}
             
           files: |
-            Firmware ${{ steps.download.outputs.firmware_version }}.zip
+            Firmware.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
